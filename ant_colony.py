@@ -4,8 +4,8 @@ from graph import pheromone_graph
 
 class ant_colony:
 
-    def __init__(self, num_verteces):
-        self.single_pheromone_value = 0.2
+    def __init__(self, num_verteces, single_pheromone_value = 0.2):
+        self.single_pheromone_value = single_pheromone_value
         self.pheromone_graph = pheromone_graph(num_verteces)
 
 
@@ -44,5 +44,8 @@ class ant_colony:
         raise Exception('Not implemented')
 
     def calculate_path_len(self, path):
-        # liczy długość scieżki
-        raise Exception('Not implemented')
+        val = 0.
+        for src, dst in zip(path[:-1], path[1:]):
+            val += self.distance_graph.get_edge_value(src, dst)
+
+        return val
