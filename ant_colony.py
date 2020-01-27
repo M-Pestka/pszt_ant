@@ -15,6 +15,7 @@ class ant_colony:
         path_len = self.calculate_path_len(path)
         for src, dst in zip(path[:-1], path[1:]):
             self.pheromone_graph.add_to_edge(src, dst, self.single_pheromone_value/path_len)
+            # miejsce na obniżenie poziomy feromonów
 
     def simulate(self, num_ants, time_out_iter = 10000):
         converged = False
