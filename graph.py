@@ -1,5 +1,6 @@
 from copy import deepcopy
 from abc import ABCMeta, abstractmethod
+import numpy as np
 
 class graph(metaclass=ABCMeta):
 
@@ -14,10 +15,13 @@ class graph(metaclass=ABCMeta):
     @abstractmethod
     def get_edge_value(self):
         pass
+    @abstractmethod
+    def reset(self):
+        pass
     
 
 class sparse_graph(graph):
-    def __init__(self, num_verteces, default_value=0.):
+    def __init__(self, num_verteces, default_value=np.inf):
         # można pozostawić niezainicjalizowane ale wymagałoby to
         # skomplikowanej obsługi
         super().__init__()
@@ -38,6 +42,9 @@ class sparse_graph(graph):
         self._graph[src_vertex][dst_vertex] = value
         self._graph[dst_vertex][src_vertex] = value
 
+    def reset(self):
+        self._graph = {i:{} for i in range(self.num_verteces)}
+
 
 class pheromone_graph(sparse_graph):
 
@@ -50,4 +57,7 @@ class pheromone_graph(sparse_graph):
         tmp = self._graph[src_vertex].get(dst_vertex, self.default_value) + value
         self._graph[src_vertex][dst_vertex] = tmp
         self._graph[dst_vertex][src_vertex] = tmp
+
+    def __repr__(self):
+        return str(self._graph)
 
