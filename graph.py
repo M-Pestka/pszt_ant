@@ -45,6 +45,46 @@ class sparse_graph(graph):
     def reset(self):
         self._graph = {i:{} for i in range(self.num_verteces)}
 
+    def max(self):
+        return max(float(max(d.values())) for d in self._graph.values())
+
+class pandas_graph(sparse_graph):
+    def __init__(self, links_dataframe, num_verteces = None, default_value=np.inf):
+        # można pozostawić niezainicjalizowane ale wymagałoby to
+        # skomplikowanej obsługi
+        if(num_verteces is None):
+            num_verteces = len(links_dataframe.source.value_counts())
+
+        super().__init__(num_verteces)
+        self._graph = {i:{} for i in range(num_verteces)}
+        self.default_value = default_value
+
+        self.num_verteces = num_verteces
+
+        self.coding = {}
+        self.reverse_coding = {}
+        # -1 bo jest inkrementowany przed dodaniem
+        self.__max_vertex_index = -1
+
+        for i, row in links_dataframe.iterrows():
+            s = row['source']
+            d = row['target']
+            c = row['cost']
+            s = self._decode_vertex(s)
+            d = self._decode_vertex(d)
+            c = float(c)
+
+            self.set_edge(s, d, c)
+
+    def _endoce_vertex(self, vertex_idx):
+        return self.reverse_coding[vertex_idx]
+
+    def _decode_vertex(self, vertex_str):
+        if(not vertex_str in self.coding):
+            self.__max_vertex_index += 1
+            self.coding[vertex_str] = self.__max_vertex_index
+            self.reverse_coding[self.__max_vertex_index] = vertex_str
+        return self.coding[vertex_str]
 
 class pheromone_graph(sparse_graph):
 

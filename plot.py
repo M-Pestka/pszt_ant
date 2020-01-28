@@ -16,19 +16,19 @@ def convert_row(row):
 def to_utm(data ):
     return data.apply(convert_row, axis=1)
 
+if(__name__ == '__main__'):
+    nodes, links = load_network('/home/pestka/Documents/studia/pszt/proj3/sndlib-networks-native/polska.txt')
 
-nodes, links = load_network('/home/pestka/Documents/studia/pszt/proj3/sndlib-networks-native/polska.txt')
-
-# nodes = to_utm(nodes)
+    # nodes = to_utm(nodes)
 
 
-name_map = {r['name']:(r['lat'], r['lon']) for i, r in nodes.iterrows()}
+    name_map = {r['name']:(r['lat'], r['lon']) for i, r in nodes.iterrows()}
 
-MAX_COST = links.cost.map(float).max() / 3.
-for i, row in links.iterrows():
-    p1 = name_map[row['source']]
-    p2 = name_map[row['target']]
-    plt.plot([p1[1], p2[1]], [p1[0], p2[0]], c='gray', linewidth = float(row['cost']) / MAX_COST)
+    MAX_COST = links.cost.map(float).max() / 3.
+    for i, row in links.iterrows():
+        p1 = name_map[row['source']]
+        p2 = name_map[row['target']]
+        plt.plot([p1[1], p2[1]], [p1[0], p2[0]], c='gray', linewidth = float(row['cost']) / MAX_COST)
 
-plt.scatter(x=nodes.lon, y=nodes.lat)
-plt.show()
+    plt.scatter(x=nodes.lon, y=nodes.lat)
+    plt.show()

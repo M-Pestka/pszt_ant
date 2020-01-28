@@ -21,11 +21,14 @@ class ant_colony:
 
     def _sim_single_ant(self):
         # symulacja pojedynczej mrowki
-        path = self._randomize_path()
-        path_len = self.calculate_path_len(path)
-        for src, dst in zip(path[:-1], path[1:]):
-            self.pheromone_graph.add_to_edge(src, dst, self.single_pheromone_value/path_len)
-            self.pheromone_graph.multiply(self.pheromone_multiplier)
+        try:
+            path = self._randomize_path()
+            path_len = self.calculate_path_len(path)
+            for src, dst in zip(path[:-1], path[1:]):
+                self.pheromone_graph.add_to_edge(src, dst, self.single_pheromone_value/path_len)
+                self.pheromone_graph.multiply(self.pheromone_multiplier)
+        except:
+            pass
 
     def simulate(self, time_out_iter = 10000):
         converged = False
