@@ -32,7 +32,6 @@ if(__name__ =='__main__'):
     solver.set_problem(src, dst, graph)
     solver.simulate()
 
-    print(solver.get_pheromone_graph())
 
     pheromone_graph = solver.get_pheromone_graph()
 

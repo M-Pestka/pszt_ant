@@ -36,5 +36,8 @@ class TestSum(unittest.TestCase):
         g2.add_to_edge(1, 2, 1.)
         self.assertEqual(4., g2.get_edge_value(1, 2))
 
+        g2.normalize()
+        self.assertEqual(1., g2.get_edge_value(1, 2))
+
 if __name__ == '__main__':
     unittest.main()

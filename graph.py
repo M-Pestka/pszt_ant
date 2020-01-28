@@ -46,7 +46,18 @@ class sparse_graph(graph):
         self._graph = {i:{} for i in range(self.num_verteces)}
 
     def max(self):
-        return max(float(max(d.values())) for d in self._graph.values())
+        def my_max(x):
+            if(x == []):
+                return 0.
+            else:
+                return max(x)
+
+
+        return my_max(float(my_max(d.values())) for d in self._graph.values())
+
+    def normalize(self):
+        max = self.max()
+        self._graph = {k:{k2: val/max for k2, val in v.items()} for k, v in self._graph.items() }
 
 class pandas_graph(sparse_graph):
     def __init__(self, links_dataframe, num_verteces = None, default_value=np.inf):
@@ -75,6 +86,8 @@ class pandas_graph(sparse_graph):
             c = float(c)
 
             self.set_edge(s, d, c)
+
+        self.normalize()
 
     def _endoce_vertex(self, vertex_idx):
         return self.reverse_coding[vertex_idx]
